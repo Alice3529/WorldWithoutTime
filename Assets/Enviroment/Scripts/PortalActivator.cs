@@ -5,7 +5,6 @@ namespace Portal
     public class PortalActivator : MonoBehaviour
     {
         [SerializeField] private Portal portal = default;
-        [SerializeField] private Color disableColor = Color.grey;
 
         private void Start()
         {

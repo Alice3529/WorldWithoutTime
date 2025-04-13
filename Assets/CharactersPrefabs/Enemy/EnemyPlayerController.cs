@@ -6,15 +6,15 @@ using System;
 public class EnemyPlayerController : MonoBehaviour
 {
     public Transform player;
-    public float detectionRange = 5f;     // How close the player needs to be to start chasing
-    public float attackRange = 1.5f;      // Range at which the enemy can attack
-    public float wanderRadius = 5f;       // Range for random wandering
-    public float wanderInterval = 3f;     // Interval to wander
-    public float attackCooldown = 2f;     // Cooldown between attacks
+    public float detectionRange = 5f;     
+    public float attackRange = 1.5f;    
+    public float wanderRadius = 5f;      
+    public float wanderInterval = 3f;    
+    public float attackCooldown = 2f;  
 
     private NavMeshAgent agent;
     private float wanderTimer;
-    private Subject<Unit> attackSubject = new Subject<Unit>();  // Reactive stream for attack events
+    private Subject<Unit> attackSubject = new Subject<Unit>(); 
 
     [SerializeField] private Animator animator = default;
 
@@ -22,18 +22,16 @@ public class EnemyPlayerController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
-        // For 2D: disable up-axis and rotation updates
         agent.updateUpAxis = false;
         agent.updateRotation = false;
 
         wanderTimer = wanderInterval;
 
-        // Setup attack cooldown using UniRx's timer
         attackSubject
-            .ThrottleFirst(TimeSpan.FromSeconds(attackCooldown))  // Ensure cooldown between attacks
-            .Subscribe(_ => Attack());  // Attack when the event is triggered
+            .ThrottleFirst(TimeSpan.FromSeconds(attackCooldown)) 
+            .Subscribe(_ => Attack());  
 
-        // Example: Debugging the attack event
+
         attackSubject.Subscribe(_ => Debug.Log("Enemy attacked!"));
 
         this.animator.SetBool("Walk", true);
@@ -114,13 +112,5 @@ public class EnemyPlayerController : MonoBehaviour
     void Attack()
     {
         this.animator.SetTrigger("Attack");
-        Debug.Log("Enemy attacks!");
-
-        // Example of applying damage (assuming player has a `Health` script)
-      //  PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
-      //  if (playerHealth != null)
-      //  {
-      //      playerHealth.TakeDamage(10); // Deals 10 damage (adjust as necessary)
-      //  }
     }
 }
