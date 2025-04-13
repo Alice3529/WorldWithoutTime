@@ -6,7 +6,7 @@ public class GearSystem
     private int currentGearAmount = default;
     private int maxGearAmount = 5;
 
-    public ReactiveProperty<int> gearAmountProperty;
+    public ReactiveProperty<int> gearAmountProperty = default;
 
     public event Action OnGearsCollected = default;
 
@@ -24,5 +24,10 @@ public class GearSystem
         {
             this.OnGearsCollected?.Invoke();
         }
+    }
+    
+    public void Reset()
+    {
+        this.currentGearAmount = 0;
     }
 }

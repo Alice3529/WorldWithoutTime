@@ -25,7 +25,16 @@ namespace Dialogue
         public async UniTask Run()
         {
             this.nextButton.OnClickAsObservable()
-                .Subscribe(_ => this.NextSentence().Forget())
+                .Subscribe(_ => 
+                {
+                    if (this.phraseCount >= this.dialogueItem.DialoguePhrase.Count)
+                    {
+                        this.gameObject.SetActive(false);
+                        this.completionSource.TrySetResult(); 
+                        return;
+                    }
+                    this.NextSentence().Forget();
+                })
                 .AddTo(this);
 
             this.nextButton.gameObject.SetActive(false);
@@ -40,13 +49,6 @@ namespace Dialogue
 
         private async UniTaskVoid NextSentence()
         {
-            if (this.phraseCount >= this.dialogueItem.DialoguePhrase.Count)
-            {
-                this.gameObject.SetActive(false);
-                this.completionSource.TrySetResult();
-                return;
-            }
-
             this.dialogueContainer = this.dialogueItem.DialoguePhrase[this.phraseCount];
             this.textBar.text = "";
             this.nextButton.gameObject.SetActive(false);

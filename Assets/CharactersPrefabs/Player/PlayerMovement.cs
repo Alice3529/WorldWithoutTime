@@ -1,5 +1,3 @@
-using System;
-using UniRx;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -51,12 +49,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Enter");
         if (collision.gameObject.tag == "Gear")
         {
             Game.Instance.GearSystem.AddGear();
             collision.gameObject.SetActive(false);
         }
+    }
+
+    private void OnDestroy()
+    {
+        playerController.Attack.Attack.performed -= OnAttack;
     }
 
 }

@@ -1,14 +1,19 @@
-using Characters.NPC;
 using UnityEngine;
 
 public class QuestCompleted : MonoBehaviour
 {
-    [SerializeField] private NPC npc = default;
+    [SerializeField] private PlayerDialogue playerDialogue = default;
     [SerializeField] private GameObject[] items = default;
 
     private void Start()
     {
-        this.npc.dialogueStarted += AnimateItems;
+        this.playerDialogue.dialogueStarted += AnimateItems;
+        this.playerDialogue.dialogueCompleted += OnGameCompleted;
+    }
+
+    private void OnGameCompleted()
+    {
+        LevelCompletedDialog.WinDialog().Forget();
     }
 
     private void AnimateItems()

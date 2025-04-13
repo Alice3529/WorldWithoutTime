@@ -21,8 +21,8 @@ MonoBehaviour:
     m_Address: LevelCompletedLose
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 3bae125ff5aaa594ca58b0cfe73011cf
-    m_Address: LevelCompletedDialog.Win
+  - m_GUID: fdc19ea86cdf91e41bba41646482f108
+    m_Address: LevelCompletedWin
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
