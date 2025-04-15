@@ -1,4 +1,6 @@
 
+using Dialogs;
+
 namespace Characters.Player
 {
     public class PlayerHealth : Health

@@ -4,45 +4,48 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerDialogue : MonoBehaviour
-{
-    [SerializeField] private DialogueItem dialogueToSpeak = default;
-    private PlayerController playerController = default;
-
-    private bool talking = false;
-
-    public event Action dialogueStarted = default;
-    public event Action dialogueCompleted= default;
-
-    private void Awake()
+namespace Characters.Player 
+{ 
+   public class PlayerDialogue : MonoBehaviour
     {
-        this.playerController = new PlayerController();
-        this.playerController.Enable();
-        this.playerController.Talk.Talk.performed += OnTalk;
-    }
+        [SerializeField] private DialogueItem dialogueToSpeak = default;
+        private PlayerController playerController = default;
 
-    private void OnTalk(InputAction.CallbackContext contex)
-    {
-        if (contex.performed)
+        private bool talking = false;
+
+        public event Action dialogueStarted = default;
+        public event Action dialogueCompleted = default;
+
+        private void Awake()
         {
-            this.Talk().Forget();
+            this.playerController = new PlayerController();
+            this.playerController.Enable();
+            this.playerController.Talk.Talk.performed += OnTalk;
         }
-    }
 
-    private async UniTaskVoid Talk()
-    {
-        if (this.dialogueToSpeak != null && this.talking == false)
+        private void OnTalk(InputAction.CallbackContext contex)
         {
-            this.dialogueStarted?.Invoke();
-            this.talking = true;
-            await Game.Instance.DialogueSystem.CreateDialogue(this.dialogueToSpeak);
-            this.talking = false;
-            this.dialogueCompleted?.Invoke();
+            if (contex.performed)
+            {
+                this.Talk().Forget();
+            }
         }
-    }
 
-    public void SetDialogueToSpeak(DialogueItem dialogue)
-    {
-        this.dialogueToSpeak = dialogue;
+        private async UniTaskVoid Talk()
+        {
+            if (this.dialogueToSpeak != null && this.talking == false)
+            {
+                this.dialogueStarted?.Invoke();
+                this.talking = true;
+                await Game.Instance.DialogueSystem.CreateDialogue(this.dialogueToSpeak);
+                this.talking = false;
+                this.dialogueCompleted?.Invoke();
+            }
+        }
+
+        public void SetDialogueToSpeak(DialogueItem dialogue)
+        {
+            this.dialogueToSpeak = dialogue;
+        }
     }
 }

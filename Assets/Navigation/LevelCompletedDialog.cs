@@ -2,15 +2,18 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public class LevelCompletedDialog : MonoBehaviour
+namespace Dialogs
 {
-    public static async UniTaskVoid WinDialog()
+    public class LevelCompletedDialog : MonoBehaviour
     {
-        var dialogueGameObject = await Addressables.InstantiateAsync("LevelCompletedWin");
-    }
+        public static async UniTaskVoid WinDialog()
+        {
+            var dialogueGameObject = await Addressables.InstantiateAsync("LevelCompletedWin");
+        }
 
-    public static async UniTaskVoid LoseDialog()
-    {
-        var dialogueGameObject = await Addressables.InstantiateAsync("LevelCompletedLose");
+        public static async UniTaskVoid LoseDialog()
+        {
+            var dialogueGameObject = await Addressables.InstantiateAsync("LevelCompletedLose");
+        }
     }
 }

@@ -3,8 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using Cysharp.Threading.Tasks;
-using static Dialogue.DialogueItem;
-
 
 namespace Dialogue
 {
@@ -18,7 +16,7 @@ namespace Dialogue
 
         private int phraseCount = default;
 
-        private DialogueContainer dialogueContainer = default;
+        private string phrase = default;
 
         private UniTaskCompletionSource completionSource = new UniTaskCompletionSource();
 
@@ -49,14 +47,14 @@ namespace Dialogue
 
         private async UniTaskVoid NextSentence()
         {
-            this.dialogueContainer = this.dialogueItem.DialoguePhrase[this.phraseCount];
+            this.phrase = this.dialogueItem.DialoguePhrase[this.phraseCount];
             this.textBar.text = "";
             this.nextButton.gameObject.SetActive(false);
             await this.PrintText();
             this.phraseCount++;
             this.nextButton.gameObject.SetActive(true);
 
-            if (this.phraseCount == this.dialogueContainer.phrase.Length)
+            if (this.phraseCount == this.phrase.Length)
             {
                 TextMeshProUGUI nextButtonText = this.nextButton.GetComponentInChildren<TextMeshProUGUI>();
                 nextButtonText.text = "Закрыть";
@@ -65,8 +63,7 @@ namespace Dialogue
 
         private async UniTask PrintText()
         {
-            string phrase = this.dialogueItem.DialoguePhrase[this.phraseCount].phrase;
-            foreach (char symbol in phrase)
+            foreach (char symbol in this.phrase)
             {
                 this.textBar.text += symbol;  
                 await UniTask.Delay(50, cancellationToken: this.GetCancellationTokenOnDestroy());  

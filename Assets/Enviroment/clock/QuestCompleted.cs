@@ -1,3 +1,5 @@
+using Characters.Player;
+using Dialogs;
 using UnityEngine;
 
 public class QuestCompleted : MonoBehaviour
