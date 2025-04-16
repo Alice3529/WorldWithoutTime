@@ -13,6 +13,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Talk",
+                    "type": "Button",
+                    "id": "2f514fa1-a3d3-43dd-b0ae-b82e0a430df5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Attack",
+                    "type": "Button",
+                    "id": "4410227c-1a73-4b70-9054-81db5b26ccb8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -70,60 +88,26 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
-                }
-            ]
-        },
-        {
-            "name": "Attack",
-            "id": "7d1878de-4f32-4850-a39d-5eda8fbaec06",
-            "actions": [
-                {
-                    "name": "Attack",
-                    "type": "Button",
-                    "id": "146f213e-a4d4-4103-84d3-ace6d2394114",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "74beceef-25aa-415e-8aba-ef494a578e38",
-                    "path": "<Keyboard>/ctrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PlayerActions",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Talk",
-            "id": "911cfc52-1162-4694-91ad-491e596dc49f",
-            "actions": [
-                {
-                    "name": "Talk",
-                    "type": "Button",
-                    "id": "76c889ea-b996-4bc3-8720-38f236c5a6b8",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "4ed50ebe-9c5f-408b-b2df-34fa8af836af",
+                    "id": "c911f41c-8bc6-4fec-b639-8e40a3fda8d1",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Talk",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bbb5eb67-1e4c-4877-8d69-e3df567c72a6",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -35,6 +35,24 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Talk"",
+                    ""type"": ""Button"",
+                    ""id"": ""2f514fa1-a3d3-43dd-b0ae-b82e0a430df5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""4410227c-1a73-4b70-9054-81db5b26ccb8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,60 +110,26 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                }
-            ]
-        },
-        {
-            ""name"": ""Attack"",
-            ""id"": ""7d1878de-4f32-4850-a39d-5eda8fbaec06"",
-            ""actions"": [
-                {
-                    ""name"": ""Attack"",
-                    ""type"": ""Button"",
-                    ""id"": ""146f213e-a4d4-4103-84d3-ace6d2394114"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""74beceef-25aa-415e-8aba-ef494a578e38"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PlayerActions"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Talk"",
-            ""id"": ""911cfc52-1162-4694-91ad-491e596dc49f"",
-            ""actions"": [
-                {
-                    ""name"": ""Talk"",
-                    ""type"": ""Button"",
-                    ""id"": ""76c889ea-b996-4bc3-8720-38f236c5a6b8"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""4ed50ebe-9c5f-408b-b2df-34fa8af836af"",
+                    ""id"": ""c911f41c-8bc6-4fec-b639-8e40a3fda8d1"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Talk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bbb5eb67-1e4c-4877-8d69-e3df567c72a6"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -163,12 +147,8 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         // Controller
         m_Controller = asset.FindActionMap("Controller", throwIfNotFound: true);
         m_Controller_Movement = m_Controller.FindAction("Movement", throwIfNotFound: true);
-        // Attack
-        m_Attack = asset.FindActionMap("Attack", throwIfNotFound: true);
-        m_Attack_Attack = m_Attack.FindAction("Attack", throwIfNotFound: true);
-        // Talk
-        m_Talk = asset.FindActionMap("Talk", throwIfNotFound: true);
-        m_Talk_Talk = m_Talk.FindAction("Talk", throwIfNotFound: true);
+        m_Controller_Talk = m_Controller.FindAction("Talk", throwIfNotFound: true);
+        m_Controller_Attack = m_Controller.FindAction("Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -231,11 +211,15 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Controller;
     private List<IControllerActions> m_ControllerActionsCallbackInterfaces = new List<IControllerActions>();
     private readonly InputAction m_Controller_Movement;
+    private readonly InputAction m_Controller_Talk;
+    private readonly InputAction m_Controller_Attack;
     public struct ControllerActions
     {
         private @PlayerController m_Wrapper;
         public ControllerActions(@PlayerController wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Controller_Movement;
+        public InputAction @Talk => m_Wrapper.m_Controller_Talk;
+        public InputAction @Attack => m_Wrapper.m_Controller_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Controller; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -248,6 +232,12 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
+            @Talk.started += instance.OnTalk;
+            @Talk.performed += instance.OnTalk;
+            @Talk.canceled += instance.OnTalk;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         private void UnregisterCallbacks(IControllerActions instance)
@@ -255,6 +245,12 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
+            @Talk.started -= instance.OnTalk;
+            @Talk.performed -= instance.OnTalk;
+            @Talk.canceled -= instance.OnTalk;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         public void RemoveCallbacks(IControllerActions instance)
@@ -272,98 +268,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         }
     }
     public ControllerActions @Controller => new ControllerActions(this);
-
-    // Attack
-    private readonly InputActionMap m_Attack;
-    private List<IAttackActions> m_AttackActionsCallbackInterfaces = new List<IAttackActions>();
-    private readonly InputAction m_Attack_Attack;
-    public struct AttackActions
-    {
-        private @PlayerController m_Wrapper;
-        public AttackActions(@PlayerController wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Attack => m_Wrapper.m_Attack_Attack;
-        public InputActionMap Get() { return m_Wrapper.m_Attack; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(AttackActions set) { return set.Get(); }
-        public void AddCallbacks(IAttackActions instance)
-        {
-            if (instance == null || m_Wrapper.m_AttackActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_AttackActionsCallbackInterfaces.Add(instance);
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
-        }
-
-        private void UnregisterCallbacks(IAttackActions instance)
-        {
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
-        }
-
-        public void RemoveCallbacks(IAttackActions instance)
-        {
-            if (m_Wrapper.m_AttackActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IAttackActions instance)
-        {
-            foreach (var item in m_Wrapper.m_AttackActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_AttackActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public AttackActions @Attack => new AttackActions(this);
-
-    // Talk
-    private readonly InputActionMap m_Talk;
-    private List<ITalkActions> m_TalkActionsCallbackInterfaces = new List<ITalkActions>();
-    private readonly InputAction m_Talk_Talk;
-    public struct TalkActions
-    {
-        private @PlayerController m_Wrapper;
-        public TalkActions(@PlayerController wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Talk => m_Wrapper.m_Talk_Talk;
-        public InputActionMap Get() { return m_Wrapper.m_Talk; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(TalkActions set) { return set.Get(); }
-        public void AddCallbacks(ITalkActions instance)
-        {
-            if (instance == null || m_Wrapper.m_TalkActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_TalkActionsCallbackInterfaces.Add(instance);
-            @Talk.started += instance.OnTalk;
-            @Talk.performed += instance.OnTalk;
-            @Talk.canceled += instance.OnTalk;
-        }
-
-        private void UnregisterCallbacks(ITalkActions instance)
-        {
-            @Talk.started -= instance.OnTalk;
-            @Talk.performed -= instance.OnTalk;
-            @Talk.canceled -= instance.OnTalk;
-        }
-
-        public void RemoveCallbacks(ITalkActions instance)
-        {
-            if (m_Wrapper.m_TalkActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(ITalkActions instance)
-        {
-            foreach (var item in m_Wrapper.m_TalkActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_TalkActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public TalkActions @Talk => new TalkActions(this);
     private int m_PlayerActionsSchemeIndex = -1;
     public InputControlScheme PlayerActionsScheme
     {
@@ -376,13 +280,7 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
     public interface IControllerActions
     {
         void OnMovement(InputAction.CallbackContext context);
-    }
-    public interface IAttackActions
-    {
-        void OnAttack(InputAction.CallbackContext context);
-    }
-    public interface ITalkActions
-    {
         void OnTalk(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }
